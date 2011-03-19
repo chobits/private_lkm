@@ -1,0 +1,46 @@
+1.License
+    This program is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by
+  the Free Software Foundation.
+
+2.Source
+  Makefile			make; make install
+
+  lines.sh			count code lines
+
+  module/			linux kernel module code dir
+        /keymain.c		module init/exit
+        /keylog.c		main logger func by hooking input system
+        /keyswitch.c		netlink interface to communicate with userland
+        /key.h			BUGS:useless in keymain.c
+        /Makefile
+
+  user/				userland program code dir
+      /keymain.c			
+      /readlog.c		read keylogs interface
+      /nlswitch.c		netlink interface to 
+      /key.h
+      /nlproto.h		self-defined proto
+      /Makefile
+
+3.program
+  module/ikey.ko		insmoded into kernel
+  user/ikey			copied into /usr/bin/
+
+4.Sorry
+    This NOTE is not a documentation.
+  I'll add a doc in google project wiki.
+
+    I'm so sorry that this code is ugly.
+  It is not an entire project, which is just my practice.
+  So if you have any problem, you can communicate with me 
+  via email <wangxiaochen0@gmail.com>
+
+5.Author
+  a student in njupt (nanjing@china)
+  Xiaochen Wang <wangxiaochen0@gmail.com>
+
+6.Thanks
+  Thank your for using it.
+  Just for fun!
+  It has tested int 2.6.31.5, 2.6.34 and android-goldfish

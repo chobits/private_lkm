@@ -1,0 +1,77 @@
+#include <linux/fs.h>
+#include <linux/cdev.h>
+#include <asm/uaccess.h>
+#include <linux/platform_device.h>
+#define DEVICE_NAME     "led"
+static dev_t dev_number;           /* Allotted device number */
+static struct class *led_class;    /* Class to which this device
+				      belongs */
+struct cdev led_cdev;              /* Associated cdev */
+/* LED open */
+	int
+led_open(struct inode *inode, struct file *file)
+{
+	return 0;
+}
+/* Write to the LED */
+	ssize_t
+led_write(struct file *file, const char *buf,
+		size_t count, loff_t *ppos)
+{
+	char kbuf;
+	if (copy_from_user(&kbuf, buf, 1)) return -EFAULT;
+	return count;
+}
+/* Release the device */
+	int
+led_release(struct inode *inode, struct file *file)
+{
+	return 0;
+}
+/* File Operations */
+static struct file_operations led_fops = {
+	.owner = THIS_MODULE,
+	.open = led_open,
+	.write = led_write,
+	.release = led_release,
+};
+/* Driver Initialization */
+	int __init
+led_init(void)
+{
+	/* Request dynamic allocation of a device major number */
+	if (alloc_chrdev_region(&dev_number, 0, 1, DEVICE_NAME)
+			< 0) {
+		printk(KERN_DEBUG "Can't register device\n");
+		return -1;
+	}
+	/* Create the led class */
+	led_class = class_create(THIS_MODULE, DEVICE_NAME);
+	if (IS_ERR(led_class)) printk("Bad class create\n");
+	/* Connect the file operations with the cdev */
+	cdev_init(&led_cdev, &led_fops);
+	led_cdev.owner = THIS_MODULE;
+	/* Connect the major/minor number to the cdev */
+	if (cdev_add(&led_cdev, dev_number, 1)) {
+		printk("Bad cdev add\n");
+		return 1;
+	}
+	device_create(led_class, NULL, dev_number,
+			NULL, DEVICE_NAME);
+	/* Register this driver with parport */
+	printk("LED Driver Initialized.\n");
+	return 0;
+}
+/* Driver Exit */
+	void __exit
+led_cleanup(void)
+{
+	unregister_chrdev_region(MKDEV(248,0), 1);
+	device_destroy(led_class, dev_number);
+	class_destroy(led_class);
+	return;
+}
+module_init(led_init);
+module_exit(led_cleanup);
+MODULE_LICENSE("GPL");
+
