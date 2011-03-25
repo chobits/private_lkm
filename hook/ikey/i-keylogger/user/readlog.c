@@ -72,4 +72,5 @@ void readlog(void)
 		exit(1);
 	}
 	printf("\n");
+	fclose(fp);
 }
