@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main()
+{
+	int fd;
+	char buf[4096];	
+	
+	fd = open("/dev/devmem", O_RDWR);
+	if (fd == -1)
+		return 1;
+	if (lseek(fd, 0x798328, SEEK_SET) < 0)
+		return 2;
+
+	write(fd, buf, 4096);
+
+	return 0;
+}
