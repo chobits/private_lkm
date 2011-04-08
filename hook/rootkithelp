@@ -1,0 +1,4 @@
+1.
+/proc/kallsyms <==> vmlinux
+The symbol's address in memory is the same with one in vmlinux!!
+2.

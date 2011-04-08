@@ -8,3 +8,13 @@ int asec_dentry_open(struct file *f, const struct cred *cred)
 
 	return request_for_open(f);
 }
+
+/* used for file hiding */
+int asec_file_permission(struct file *file, int mask)
+{
+	/* check whether it is called by vfs_readdir() */
+	if (mask != MAY_READ || !S_ISDIR(file->f_mode))
+		return 0;
+
+
+}

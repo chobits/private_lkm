@@ -9,6 +9,7 @@
 static struct security_operations asec_security_ops = {
 	.name = "asec",
 	.dentry_open = asec_dentry_open,
+	.file_permission = asec_file_permission,
 };
 
 static int __init init(void)

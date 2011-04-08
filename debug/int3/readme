@@ -1,0 +1,4 @@
+If you just run :
+	asm volatile ("int3");
+the module will print debug infomation and be killed.
+But module still stay in kernel and cannot be removed.
