@@ -54,13 +54,14 @@ static void my_timer_func(unsigned long ptr)
 	else
 		*pstatus = ALL_LEDS_ON;
 
-/*
- * We use current virtual console via fg_console ,so we can see the led
- * blinking all the time :P
- */
+	/*
+	 * We use current virtual console via fg_console ,so we can see the led
+	 * blinking all the time :P
+	 */
 	(my_driver->ops->ioctl) (vc_cons[fg_console].d->vc_tty, NULL, KDSETLED,
 			    *pstatus);
 
+	/* reactivate the timer */
 	my_timer.expires = jiffies + BLINK_DELAY;
 	add_timer(&my_timer);
 }
@@ -72,10 +73,10 @@ int kbleds_init(void)
 	printk(KERN_ALERT "kbleds: loading\n");
 	printk(KERN_ALERT "kbleds: fgconsole is %x\n", fg_console);
 	
-/*
- * It just scans consoles and prints it,which has no nothing to
- * with our led blinking.
- */
+	/*
+	 * It just scans consoles and prints it,which has no nothing to
+	 * with our led blinking.
+	 */
 	for (i = 0; i < MAX_NR_CONSOLES; i++) {
 		if (!vc_cons[i].d)
 			break;
@@ -88,9 +89,7 @@ int kbleds_init(void)
 	my_driver = vc_cons[fg_console].d->vc_tty->driver;
 	printk(KERN_ALERT "kbleds: tty driver magic %x\n", my_driver->magic);
 
-/*
- * Set up the LED blink timer the first time
- */
+	/* Set up the LED blink timer the first time */
 	init_timer(&my_timer);
 	my_timer.function = my_timer_func;
 	my_timer.data = (unsigned long)&kbledstatus;
