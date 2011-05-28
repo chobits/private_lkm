@@ -15,9 +15,13 @@
 #include <linux/list.h>
 #include <linux/namei.h>
 #include <linux/poll.h>
+#include <linux/ctype.h>
 
 #define asecerr(fmt, arg...)\
 	printk(KERN_ERR "%s "fmt"\n", __FUNCTION__, ##arg)
+
+#define asecinfo(fmt, arg...)\
+	printk(KERN_ALERT "%s "fmt"\n", __FUNCTION__, ##arg)
 
 #ifdef DEBUG
 #define asecdbg(fmt, arg...)\
@@ -26,22 +30,26 @@
 #define asecdbg(fmt, arg...)
 #endif
 
-/* used for /sys/kernel/security/asec/querd read/write/poll */
-struct query_entry {
-	unsigned int syncnum;	/* syncronizing with userspace communication */
-	unsigned int answer;	/* user-space answer for this query */
-	char *query;		/* query string for user to read */
-	int len;		/* string length of query */
-	struct list_head list;	/* listed in query_list */
-	char query_str[0];	/* query real addr */
-};
+#define dbg(fmt, arg...)\
+	printk(KERN_ALERT "[k]%s "fmt"\n", __FUNCTION__, ##arg)
 
-extern int request_for_open(struct file *);
 
+
+extern int request_for_chdir(struct inode *);
+extern int request_for_policy(struct file *);
+extern int request_for_query(struct file *);
+
+/* hook */
 extern int asec_dentry_open(struct file *, const struct cred *);
+extern int asec_inode_permission(struct inode *, int);
+
 extern void unregister_security(struct security_operations *);
 
 extern void asecfs_exit(void);
 extern int asecfs_init(void);
+
+
+extern void exit_policy(void);
+extern void init_policy(void);
 
 #endif

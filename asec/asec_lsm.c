@@ -9,24 +9,25 @@
 static struct security_operations asec_security_ops = {
 	.name = "asec",
 	.dentry_open = asec_dentry_open,
-	.file_permission = asec_file_permission,
+	.inode_permission = asec_inode_permission,
 };
 
 static int __init init(void)
 {
 	struct cred *cred = (struct cred *)current_cred();
+	int err;
 
-	if (register_security(&asec_security_ops))
-		return -1;
+	if ((err = register_security(&asec_security_ops)))
+		return err;
+	printk(KERN_ALERT "register asec security successes\n");
 
 	cred->security = &asec_security_ops;
-	if (asecfs_init() != 0) {
+	if ((err = asecfs_init()) != 0) {
 		unregister_security(&asec_security_ops);
-		return -1;
+		return err;
 	}
-	
 
-	printk(KERN_ALERT "test security module installed ok\n");
+	printk(KERN_ALERT "asec security module installed ok\n");
 	return 0;
 }
 
