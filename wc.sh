@@ -9,4 +9,4 @@ then
 	exit 0
 fi
 
-wc -l `find $@| grep "\.[csSh]$"`
+wc -l `find $@ -name \*.[csSh]`
