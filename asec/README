@@ -1,0 +1,5 @@
+A simple security module based on Linux Security Module(LSM)
+Some ideas comes from tomoyo(http://tomoyo.sourceforge.jp/).
+
+*.c     : asec kernel module 
+user/   : usermode program to listen realtime policy events

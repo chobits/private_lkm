@@ -1,4 +1,12 @@
-#/bin/bash
-echo "/root/module/asec/testfile 22332 DENY_READ" > /sys/kernel/security/asec/policy
-echo "/bin/dd 376165 DENY_ACCESS" > /sys/kernel/security/asec/policy
-echo "/root/module/char 560552 DENY_ACCESS DENY_READ" > /sys/kernel/security/asec/policy
+# /bin/bash
+
+# interface with our kernel security module
+policy_file=/sys/kernel/security/asec/policy
+# which file to be protected
+object_file=
+# inode number of object file
+inode_number=$(ls -i $object_file | cut -d ' ' -f 1)
+# DENY_READ / DENY_WRITE /...
+policy="DENY_READ"
+
+echo "$object_file $inode_number $policy" > $policy_file
