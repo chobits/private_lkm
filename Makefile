@@ -1,22 +1,21 @@
-obj-m := hello.o
-CURRENT_PATH :=$(shell pwd)
-LINUX_KERNEL_PATH :=/usr/src/kernels/$(shell uname -r)
-
-#the module name will be chrdev.o. Kbuild will
-#compile the objects listed in $(chrdev-objs) and then run
-#"$(LD) -r" on the list of these files to generate chrdev.o.
-#hello-objs := chrdev.o chrdev2.o
-
-# make -C /xx  <=>cd /xx; make
-# we can also use SUBDIRS instead of M
-# but M take precedence!
+#
 all:
-	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) modules
-clean:
-	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) clean
+	@echo 'Makefile help infomation:'
+	@echo ' all      : display current help information'
+	@echo ' hello    : generate a simple kernel module object(hello_kernel.ko)'
+	@echo ' clean    : clean objects hello_kernel.* in current directory'
+	@echo ' clean_all: clean all objects in subdirectores recursively'
 
-#generate all-no config
-# make allnoconfig
-#how to make module in kernel-src:
-# make M=fs/ext4 modules ==> ext4.ko
-# make M=fs/ext4 clean
+# clean all objects
+clean_all:
+	find . -name "Makefile" -exec make -C `dirname {}` clean ';'
+
+# simple example
+obj-m := hello_kernel.o
+DEST :=$(shell pwd)
+KERN_SRC :=/usr/src/kernels/$(shell uname -r)
+
+hello:
+	make -C $(KERN_SRC) M=$(DEST) modules
+clean:
+	make -C $(KERN_SRC) M=$(DEST) clean
