@@ -1,4 +1,4 @@
-#
+
 all:
 	@echo 'Makefile help infomation:'
 	@echo ' all      : display current help information'
