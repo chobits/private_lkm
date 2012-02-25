@@ -18,7 +18,7 @@ unsigned int nfhook(unsigned hooknum, struct sk_buff *skb,
 		const struct net_device *in, const struct net_device *out,
 			int (*okfn)(struct sk_buff *))
 {
-	struct sk_buff *sk = skb;	
+	struct sk_buff *sk = skb;
 	struct iphdr *ip;
 	ip = ip_hdr(sk);
 	/* little endian */
@@ -37,7 +37,7 @@ unsigned int nfhook(unsigned hooknum, struct sk_buff *skb,
 	nfhops.pf = pfnum; /*family*/		\
 	nfhops.priority = NF_IP_PRI_FIRST;	\
 	nf_register_hook(&nfhops)
-	
+
 
 
 

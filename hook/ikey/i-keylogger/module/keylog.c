@@ -38,7 +38,9 @@ void write_to_file(char *filename, int value)
 
 	old_fs = get_fs();
 	set_fs(KERNEL_DS);
+
 	file->f_op->write(file, (char *)&value, sizeof(int), &file->f_pos);
+
 	set_fs(old_fs);
 }
 

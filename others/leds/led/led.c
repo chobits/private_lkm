@@ -24,9 +24,9 @@ char kbledstatus = 0;
 
 // linux/kd.h:
 //	#define KDSETLED        0x4B32  /* set led state [lights, not flags] */
-//	#define         LED_SCR         0x01    /* scroll lock led */
-//	#define         LED_NUM         0x02    /* num lock led */
-//	#define         LED_CAP         0x04    /* caps lock led */
+//	#define LED_SCR         0x01    /* scroll lock led */
+//	#define LED_NUM         0x02    /* num lock led */
+//	#define LED_CAP         0x04    /* caps lock led */
 
 /*
  * Function my_timer_func blinks the keyboard LEDs periodically by invoking

