@@ -1,14 +1,7 @@
-What?
-  Some linux kernel module examples
-  All the examples are written when I try to hack linux kernel.
+About this project
 
-Usage?
-  I think the best way to learn linux kernel is to
-   read the fucking source code(RFSC).
-  But writing real code to hack kernel is benefit for
-   you to understand the kernel source.
-  Linux kernel module(LKM) gives us a good chance to write
-   our own code into kernel.
+ Learn Linux Kernel source and practice by writing linux kernel module.
+ All code in this projects has been test only on linux 2.6.
 
-Author?
+Author
  Xiaochen Wang <wangxiaochen0@gmail.com>
