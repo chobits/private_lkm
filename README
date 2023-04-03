@@ -1,7 +1,7 @@
 About this project
 
  Learn Linux Kernel source and practice by writing linux kernel module.
- All code in this projects has been test only on linux 2.6.
+ All code in this project has only been tested on Linux 2.6.
 
 Author
  Xiaochen Wang <wangxiaochen0@gmail.com>
